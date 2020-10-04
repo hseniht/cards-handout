@@ -34,8 +34,8 @@ export default class Dashboard extends Component {
       inputt: "",
       cardSets: { spades, hearts, diamonds, club },
       deck: deck,
-      shuffledDeck: shuffleCards(deck)
-
+      shuffledDeck: shuffleCards(deck),
+      // collections: null
    }
 
    generatePeopleArray = () => {
@@ -71,30 +71,59 @@ export default class Dashboard extends Component {
       })
    }
    getInput = (e) => {
+      // const input = parseInt(e.target.value, 10);
+      const input = e.target.value;
+
+      //validation run only when there is input value
+      // if(!Number(input) && input.length > 0){
+      if(isNaN(input) || input.indexOf(".") !== -1){
+         this.setState({
+            inputt: "",
+         })
+         return alert("“Input value does not exist or value is invalid")
+      }
+
       this.setState({
-         inputt: e.target.value
+         inputt: input,
       })
+   }
+   reShuffleDeck = () => {
+      this.setState({
+         shuffledDeck: shuffleCards(deck),
+         collections: null
+      })
+      console.log("deck shuffeld");
    }
    render() {
       const { cardsArr, people, inputt, collections } = this.state;
 
       const renderOutputs = () => {
          return (
-            <ul>
-               {Object.keys(collections).map((v, i) => <li className="listing" key={i}>{`Person${v} : ` + collections[v].toString()}</li>)}
+            <ul className="listing-section">
+               {Object.keys(collections).map((v, i) => (
+                  <li className="list" key={i}>
+                     <span className="person">{`Person${v} : `}</span>
+                     <span className="hands">{collections[v].toString()}</span>
+                  </li>
+               )
+               )}
             </ul>
          )
       }
 
       return (
-         <div>
-            <h2>Card Deal</h2>
-            <input type="number" value={this.state.inputt} onChange={this.getInput} />
+         <div className="container">
+            <h2>Card Dealer &#9824;</h2>
+            <h5 className="input-label">Enter number of people</h5>
+            <input className="input-field" placeholder="Numbers e.g. 4" onChange={this.getInput} value={inputt} />
             <br />
-            <button type="button" onClick={this.generatePeopleArray}>Deal</button>
-            <div></div>
-            {
-               collections && renderOutputs()
+            <button className="btn-custom deal" type="button" onClick={this.generatePeopleArray}>Deal</button>
+            <button className="btn-custom reset" type="button" onClick={this.reShuffleDeck}>Reshuffle</button>
+            {collections &&
+               <div className="list-wrapper">
+               <div className="legend"> Spade = S, Heart = H, Diamond = D, Club = C</div>
+               {renderOutputs()}
+            </div>
             }
          </div>
       )
