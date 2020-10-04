@@ -44,7 +44,7 @@
 }
 
 .listing-section {
-   height: 100%;
+   height: calc(100% - 40px);
    overflow: auto;
    padding: 0;
    margin: 0;
@@ -108,5 +108,5 @@
 
  .legend {
    font-size: 12px;
-   margin: 12px;
+   padding: 12px;
  }
